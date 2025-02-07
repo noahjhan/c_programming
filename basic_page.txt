@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NOAHJHAN</title>
+    <style>
+        /* Styling for Text */
+        h1, h2, p {
+            margin: 0;
+            padding: 10px;
+        }
+
+        h1 {
+            font-size: 3rem;
+        }
+
+        h2 {
+            font-size: 2rem;
+        }
+
+        p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        body {
+            margin: 0;
+            font-family: JetBrains Mono, monospace;
+            color: #f0e6d2;
+            background-color: #458588; 
+            transition: background-color 0.5s ease;
+        }
+
+        section {
+            padding: 20px;
+            text-align: center;
+        }
+
+        #section2 img {
+            margin: 10px;
+            height: 400px;
+        }
+
+        #pdf-container {
+            margin: 20px auto;
+            text-align: center;
+        }
+
+        /* Add more section styles here if needed */
+    </style>
+</head>
+<body>
+ <section>
+        <h1>N J Han</h1>
+        <p>Artist. Economist. Software Engineer.</p>
+
+        <!-- Add Image Here -->
+        <div id="section2">
+            <img src="IMG_7674.PNG" alt="Portfolio Image">
+            <img src="IMG_7881.jpeg" alt="test_img">
+        </div>
+    </section>
+
+    <!-- Add content to make scrolling happen -->
+    <div style="height: 2000px;">
+        <p>I am a CS + Economics Student at the University of Illinois, Urbana-Champaign! I am also part of the Tutoring Staff for the Siebel School of Computing and Data Science of UIUC. In my spare time I play electric guitar and create 3D renderings in Blender Animation Software.</p>
+        <br />
+        <p>Programming Languages: C, C++, Java, Kotlin, Python, R, JavaScript</p>
+    <!-- Embedded PDF Section -->
+    <section id="pdf-container">
+        <h2>Resume</h2>
+        <iframe src="resume_updated.pdf" width="850" height="1100" style="border: none;"></iframe>
+    </section>
+    </div>
+
+
+    <script>
+        // JavaScript to change the background color based on scroll position
+        const colors = [
+            // "#f0e6d2",  // Cream color
+            "#458588", // (69, 133, 136)
+            "#d79921", // (215, 153, 33)
+            "#cc241d", // (204, 36, 29)
+            "#3c3836", // (60, 56, 54)
+        ];
+
+        window.addEventListener('scroll', () => {
+            const scrollPercentage = document.documentElement.scrollTop / (document.documentElement.scrollHeight - window.innerHeight);
+            const colorIndex = Math.floor(scrollPercentage * (colors.length - 1));
+            document.body.style.backgroundColor = colors[colorIndex];
+        });
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,83 @@
+#include <arpa/inet.h>
+#include <netdb.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/socket.h>
+#include <sys/types.h>
+#include <unistd.h>
+// a simple TCP Server
+// Does not handle reuse repots;
+// does not handle SIGPIPE; synchronous
+
+int main(int argc, char **argv)
+{
+  int s;
+  int sock_fd = socket(AF_INET, SOCK_STREAM, 0);
+
+  struct addrinfo hints, *result;
+
+  memset(&hints, 0, sizeof(struct addrinfo));
+
+  hints.ai_family = AF_INET;
+  hints.ai_socktype = SOCK_STREAM;
+  hints.ai_flags = AI_PASSIVE;
+
+  s = getaddrinfo(NULL, "8682", &hints, &result);
+  if (s != 0) {
+    fprintf(stderr, "getaddrinfo: %s\n", gai_strerror(s));
+  }
+
+  // force port & force network card
+  if (bind(sock_fd, result->ai_addr, result->ai_addrlen) != 0) {
+    perror("bind()");
+    exit(1);
+  }
+
+  // accept up to ten 'customers'... not a blocking call
+  if (listen(sock_fd, 10) != 0) {
+    perror("listen()");
+    exit(1);
+  }
+
+  struct sockaddr_in *result_addr = (struct sockaddr_in *)result->ai_addr;
+  printf("listening on file destriptor %d, port %d\n", sock_fd,
+         ntohs(result_addr->sin_port));
+
+  printf("waiting for connection...\n");
+
+  while (1) {
+    int client_fd = accept(sock_fd, NULL, NULL);
+    printf("connection made: client_fd=%d\n", client_fd);
+
+    FILE *html_file = fopen("basic_page.txt", "r");
+    if (!html_file) {
+      perror("Failed to open HTML file");
+      close(client_fd);
+      continue;
+    }
+
+    char buffer[1024];
+    size_t bytes_read;
+    while ((bytes_read = fread(buffer, 1, sizeof(buffer), html_file)) > 0) {
+      send(client_fd, buffer, bytes_read, 0);
+    }
+    fclose(html_file);
+    /*
+    ssize_t len = read(client_fd, buffer, sizeof(buffer) - 1);
+    if (len > 0) {
+      buffer[len] = '\0'; // null terminate
+      printf("read %d chars\n", (int)len);
+      printf("===\n");
+      printf("%s\n", buffer);
+    }
+    */
+    // write(client_fd, "Hello\n", 6);
+    // or use dprintf
+    //
+    dprintf(client_fd, "This server code was written in year %d.\n", 2024);
+    shutdown(client_fd, SHUT_RDWR);
+    close(client_fd);
+  }
+  exit(0);
+}
