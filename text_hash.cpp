@@ -12,4 +12,3 @@ int main() {
 
 // tokenize by word
 // hash each word
-// balls in your mouth locally

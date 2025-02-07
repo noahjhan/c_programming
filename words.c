@@ -7,11 +7,11 @@
 int main(int argc, char** argv) {
     int i = 0;
     // printf("%s/n", argv[47]);
-    char** fuck;
+    char** arr;
     printf("number of arguments: %d\n", argc);
     while(1) {
         if (1 || argv[i] != NULL) {
-            printf("%s\n", fuck[i]);
+            printf("%s\n", arr[i]);
             usleep(10000);
         }
         i++;
