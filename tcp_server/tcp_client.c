@@ -24,7 +24,7 @@ int main(int argc, char **argv)
   hints.ai_family = AF_INET;       // IPv4 (AF_INET6 for IPv6 addresses)
   hints.ai_socktype = SOCK_STREAM; // TPC like a POSIX pipes
                                    //
-  int s = getaddrinfo("192.168.0.196", PORT_NUM, &hints, &result);
+  int s = getaddrinfo("127.0.0.1", PORT_NUM, &hints, &result);
   if (s != 0) {
     fprintf(stderr, "getaddrinfo: %s\n", gai_strerror(s));
     exit(1);
