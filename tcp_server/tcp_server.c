@@ -68,7 +68,7 @@ void handle_client_request(int client_fd)
 
     if (strlen(resource_path) == 0 ||
         strcmp(resource_path, "index.html") == 0) {
-      serve_file(client_fd, "basic_page.txt", "text/html; charset=UTF-8");
+      serve_file(client_fd, "index.html", "text/html; charset=UTF-8");
     } else if (strstr(resource_path, "IMG")) {
       serve_file(client_fd, resource_path, "image/png");
     } else if (strstr(resource_path, ".pdf")) {
