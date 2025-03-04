@@ -1,5 +1,7 @@
 {
     "files.associations": {
-        "in.h": "c"
+        "in.h": "c",
+        "__verbose_abort": "cpp",
+        "cstdio": "cpp"
     }
 }

@@ -19,7 +19,8 @@ void serve_file(int client_fd, const char *file_path, const char *content_type)
 {
   printf("formatted request: %s\n", file_path);
   FILE *file = fopen(file_path, "rb");
-  if (!file) {
+  if (!file)
+  {
     perror("Failed to open file");
     close(client_fd);
     return;
@@ -36,7 +37,8 @@ void serve_file(int client_fd, const char *file_path, const char *content_type)
 
   char buffer[BUFFER_SIZE];
   size_t bytes_read;
-  while ((bytes_read = fread(buffer, 1, sizeof(buffer), file)) > 0) {
+  while ((bytes_read = fread(buffer, 1, sizeof(buffer), file)) > 0)
+  {
     send(client_fd, buffer, bytes_read, 0);
   }
 
@@ -47,7 +49,8 @@ void handle_client_request(int client_fd)
 {
   char request[BUFFER_SIZE];
   ssize_t len = read(client_fd, request, sizeof(request) - 1);
-  if (len <= 0) {
+  if (len <= 0)
+  {
     perror("Failed to read client request");
     close(client_fd);
     return;
@@ -59,7 +62,8 @@ void handle_client_request(int client_fd)
   char *start_ptr = strstr(request, "GET /");
   char *end_ptr = strstr(request, " HTTP/");
 
-  if (start_ptr && end_ptr) {
+  if (start_ptr && end_ptr)
+  {
     start_ptr += 5; // Skip "GET /"
     size_t path_length = end_ptr - start_ptr;
     char resource_path[path_length + 1];
@@ -67,13 +71,20 @@ void handle_client_request(int client_fd)
     resource_path[path_length] = '\0';
 
     if (strlen(resource_path) == 0 ||
-        strcmp(resource_path, "index.html") == 0) {
+        strcmp(resource_path, "index.html") == 0)
+    {
       serve_file(client_fd, "index.html", "text/html; charset=UTF-8");
-    } else if (strstr(resource_path, "IMG")) {
+    }
+    else if (strstr(resource_path, "IMG"))
+    {
       serve_file(client_fd, resource_path, "image/png");
-    } else if (strstr(resource_path, ".pdf")) {
+    }
+    else if (strstr(resource_path, ".pdf"))
+    {
       serve_file(client_fd, resource_path, "application/pdf");
-    } else {
+    }
+    else
+    {
       const char *error_response = "HTTP/1.1 404 Not Found\r\n"
                                    "Content-Type: text/plain; charset=UTF-8\r\n"
                                    "Connection: close\r\n"
@@ -81,7 +92,9 @@ void handle_client_request(int client_fd)
                                    "404 Not Found\n";
       send(client_fd, error_response, strlen(error_response), 0);
     }
-  } else {
+  }
+  else
+  {
     const char *error_response = "HTTP/1.1 400 Bad Request\r\n"
                                  "Content-Type: text/plain; charset=UTF-8\r\n"
                                  "Connection: close\r\n"
@@ -103,7 +116,8 @@ void start_server(int port_num)
 {
 
   int sock_fd = socket(AF_INET, SOCK_STREAM, 0);
-  if (sock_fd < 0) {
+  if (sock_fd < 0)
+  {
     perror("Socket creation failed");
     exit(1);
   }
@@ -114,13 +128,15 @@ void start_server(int port_num)
   server_addr.sin_addr.s_addr = INADDR_ANY;
   server_addr.sin_port = htons(port_num);
 
-  if (bind(sock_fd, (struct sockaddr *)&server_addr, sizeof(server_addr)) < 0) {
+  if (bind(sock_fd, (struct sockaddr *)&server_addr, sizeof(server_addr)) < 0)
+  {
     perror("Binding failed");
     close(sock_fd);
     exit(1);
   }
 
-  if (listen(sock_fd, 10) < 0) {
+  if (listen(sock_fd, 10) < 0)
+  {
     perror("Listening failed");
     close(sock_fd);
     exit(1);
@@ -128,9 +144,11 @@ void start_server(int port_num)
 
   printf("Server is listening on port %d...\n", port_num);
 
-  while (1) {
+  while (1)
+  {
     int client_fd = accept(sock_fd, NULL, NULL);
-    if (client_fd < 0) {
+    if (client_fd < 0)
+    {
       perror("Accept failed");
       continue;
     }
@@ -147,11 +165,11 @@ int main(int argc, char **argv)
   signal(SIGINT, signal_handler);
 
   int port_num = 8063;
-  if (argc == 2) {
+  if (argc == 2)
+  {
     port_num = atoi(argv[1]);
   }
 
   start_server(port_num);
   return 0;
 }
-
